@@ -4,17 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import whiskey.code.courses.config.properties.BotProperties;
-import whiskey.code.courses.entity.Course;
 import whiskey.code.courses.service.ButtonService;
-import whiskey.code.courses.service.db.CourseService;
-import whiskey.code.courses.util.Utils;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -27,18 +21,15 @@ public class CoursesBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
-            Long chatId = update.getMessage().getChatId();
-
-            SendMessage message = buttonService.buttonsCourses(chatId);
-
+            var chatId = update.getMessage().getChatId();
             try {
-                execute(message);
+                execute(buttonService.courses(chatId, 0));
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
 
         } else if (update.hasChannelPost()) {
-            Long chatId = update.getChannelPost().getChatId();
+            var chatId = update.getChannelPost().getChatId();
             if (chatId.equals(botProperties.getAdminChannel())) {
 
                 SendMessage message = new SendMessage(String.valueOf(chatId),
@@ -50,6 +41,19 @@ public class CoursesBot extends TelegramLongPollingBot {
                     throw new RuntimeException(e);
                 }
 
+            }
+        }else if (update.hasCallbackQuery()) {
+            var callbackData = update.getCallbackQuery().getData();
+            var chatId = update.getCallbackQuery().getMessage().getChatId();
+
+            if (callbackData.startsWith("page_")) {
+                int page = Integer.parseInt(callbackData.split("_")[1]);
+                try {
+                    execute(buttonService.updateCourses(chatId, page,
+                            update.getCallbackQuery().getMessage().getMessageId()));
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
