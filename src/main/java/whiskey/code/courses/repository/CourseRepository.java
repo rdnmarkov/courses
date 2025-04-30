@@ -13,4 +13,5 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT c FROM Course c JOIN FETCH c.lessons") // Загружает курсы с уроками за один запрос
     List<Course> findAllCoursesWithLessons();
 
+    List<Course> findByVisibilityTrue();
 }

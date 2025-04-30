@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CourseService {
 
-    List<Course> allCourses();
+    List<Course> findByVisibilityTrue();
 
 }

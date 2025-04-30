@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import whiskey.code.courses.config.properties.BotProperties;
 import whiskey.code.courses.entity.Course;
+import whiskey.code.courses.service.ButtonService;
 import whiskey.code.courses.service.db.CourseService;
 import whiskey.code.courses.util.Utils;
 
@@ -21,19 +22,17 @@ import java.util.List;
 public class CoursesBot extends TelegramLongPollingBot {
 
     private final BotProperties botProperties;
-    private final CourseService courseService;
+    private final ButtonService buttonService;
 
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
             Long chatId = update.getMessage().getChatId();
 
-            List<Course> courses = courseService.allCourses();
-
-            SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "Курсы :" + courses.toString());
+            SendMessage message = buttonService.buttonsCourses(chatId);
 
             try {
-                execute(sendMessage);
+                execute(message);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }

@@ -14,7 +14,7 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
 
-    public List<Course> allCourses(){
-        return courseRepository.findAllCoursesWithLessons();
+    public List<Course> findByVisibilityTrue(){
+        return courseRepository.findByVisibilityTrue();
     }
 }
