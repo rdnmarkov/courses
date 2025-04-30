@@ -1,0 +1,58 @@
+# Скомпилированные классы
+*.class
+
+# Файлы сборки (Maven, Gradle)
+/target/
+/build/
+/out/
+/bin/
+*.jar
+*.war
+*.ear
+*.nar
+
+# Логи и дампы
+*.log
+*.tmp
+*.swp
+*.dump
+
+# Файлы IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+
+# Файлы зависимостей (если не используете Maven/Gradle)
+/lib/
+/libs/
+
+# Файлы тестов (JUnit)
+/test-output/
+/test-results/
+
+# Файлы покрытия кода (JaCoCo)
+/jacoco.exec
+/jacoco.data
+/coverage/
+
+# Файлы конфигурации (если нужно исключить)
+*.properties
+*.yml
+*.yaml
+
+# Исключение файлов документации (если нужно)
+/docs-generated/
+/apidocs/
+
+# Исключение локальных конфигов (если нужно)
+/config/local/
+*.local
