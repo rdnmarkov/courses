@@ -5,9 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import whiskey.code.courses.config.properties.BotProperties;
+import whiskey.code.courses.entity.Course;
+import whiskey.code.courses.service.db.CourseService;
+import whiskey.code.courses.util.Utils;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -15,16 +21,19 @@ import whiskey.code.courses.config.properties.BotProperties;
 public class CoursesBot extends TelegramLongPollingBot {
 
     private final BotProperties botProperties;
+    private final CourseService courseService;
 
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
             Long chatId = update.getMessage().getChatId();
 
-            ForwardMessage message = getForwardMessage(chatId, 17);
+            List<Course> courses = courseService.allCourses();
+
+            SendMessage sendMessage = new SendMessage(String.valueOf(chatId), "Курсы :" + courses.toString());
 
             try {
-                execute(message);
+                execute(sendMessage);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -32,19 +41,18 @@ public class CoursesBot extends TelegramLongPollingBot {
         } else if (update.hasChannelPost()) {
             Long chatId = update.getChannelPost().getChatId();
             if (chatId.equals(botProperties.getAdminChannel())) {
-                log.info("catId - " + chatId + " messageId - " + update.getChannelPost().getMessageId());
+
+                SendMessage message = new SendMessage(String.valueOf(chatId),
+                        String.valueOf(update.getChannelPost().getMessageId()));
+
+                try {
+                    execute(message);
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
         }
-    }
-
-    private ForwardMessage getForwardMessage(Long chatId, Integer messageId) {
-        ForwardMessage message = ForwardMessage.builder()
-                .chatId(String.valueOf(chatId))
-                .fromChatId(String.valueOf(botProperties.getAdminChannel()))
-                .messageId(messageId)
-                .protectContent(true)
-                .build();
-        return message;
     }
 
 
