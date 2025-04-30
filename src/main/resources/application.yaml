@@ -1,6 +1,7 @@
 bot:
   name: ${BOT_NAME}
   key: ${BOT_KEY}
+  admin-channel: ${BOT_ADMIN_CHANNEL}
 
 spring:
   application:

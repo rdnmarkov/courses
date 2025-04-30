@@ -12,5 +12,6 @@ public class BotProperties {
 
     private String name;
     private String key;
+    private Long adminChannel;
 
 }
