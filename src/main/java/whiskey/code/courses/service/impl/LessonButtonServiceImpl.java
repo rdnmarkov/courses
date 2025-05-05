@@ -3,11 +3,14 @@ package whiskey.code.courses.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import whiskey.code.courses.entity.Lesson;
-import whiskey.code.courses.service.LessonButtonService;
+import whiskey.code.courses.service.ButtonService;
 import whiskey.code.courses.service.db.LessonService;
 
 import java.util.ArrayList;
@@ -19,16 +22,23 @@ import static whiskey.code.courses.util.Utils.navButton;
 
 @Service
 @RequiredArgsConstructor
-public class LessonButtonServiceImpl implements LessonButtonService {
+public class LessonButtonServiceImpl implements ButtonService {
 
     private final LessonService lessonService;
     private final static String TEXT = "📚 Выберите урок:";
     private final static String BACK_TO_COURSE = "📚 Назад к курсам ◀";
 
     @Override
-    public EditMessageText updateLessons(Long chatId, int pageLessons,
-                                         int pageCourses, Long courseId,
-                                         Integer messageId) {
+    public EditMessageText updateButtons(CallbackQuery callbackQuery) {
+
+        Integer messageId = callbackQuery.getMessage().getMessageId();
+        Long chatId = callbackQuery.getMessage().getChatId();
+
+        String[] lessonsInfo = callbackQuery.getData().split("_");
+        long courseId = Long.parseLong(lessonsInfo[1]);
+        int pageLessons = Integer.parseInt(lessonsInfo[2]);
+        int pageCourses = Integer.parseInt(lessonsInfo[3]);
+
         return EditMessageText.builder()
                 .chatId(String.valueOf(chatId))
                 .messageId(messageId)
@@ -70,5 +80,10 @@ public class LessonButtonServiceImpl implements LessonButtonService {
 
         markup.setKeyboard(rows);
         return markup;
+    }
+
+    @Override
+    public SendMessage getButtons(Message message) {
+        return null;
     }
 }

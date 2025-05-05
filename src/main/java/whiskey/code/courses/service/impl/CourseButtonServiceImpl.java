@@ -5,10 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import whiskey.code.courses.entity.Course;
-import whiskey.code.courses.service.CourseButtonService;
+import whiskey.code.courses.service.ButtonService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,21 +26,27 @@ import static whiskey.code.courses.util.Utils.navButton;
 
 @Service
 @RequiredArgsConstructor
-public class CourseButtonServiceImpl implements CourseButtonService {
+public class CourseButtonServiceImpl implements ButtonService {
 
     private final whiskey.code.courses.service.db.CourseService courseService;
     private final static String TEXT = "📚 Выберите курс:";
 
 
-    public SendMessage courses(Long chatId, int page) {
+    public SendMessage getButtons(Message message) {
+
+        Long chatId = message.getChatId();
 
         return SendMessage.builder()
                 .chatId(String.valueOf(chatId))
                 .text(TEXT)
-                .replyMarkup(coursesButtons(page)).build();
+                .replyMarkup(coursesButtons(0)).build();
     }
 
-    public EditMessageText updateCourses(Long chatId, int page, Integer messageId) {
+    public EditMessageText updateButtons(CallbackQuery callbackQuery) {
+
+        Long chatId = callbackQuery.getMessage().getChatId();
+        Integer messageId = callbackQuery.getMessage().getMessageId();
+        int page = Integer.parseInt(callbackQuery.getData().split("_")[1]);
 
         return EditMessageText.builder()
                 .chatId(String.valueOf(chatId))

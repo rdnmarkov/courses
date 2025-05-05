@@ -2,14 +2,20 @@ package whiskey.code.courses.bot;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import whiskey.code.courses.config.properties.BotProperties;
-import whiskey.code.courses.service.CourseButtonService;
-import whiskey.code.courses.service.LessonButtonService;
+import whiskey.code.courses.service.ButtonService;
+import whiskey.code.courses.service.impl.CourseButtonServiceImpl;
+import whiskey.code.courses.service.impl.LessonButtonServiceImpl;
+import whiskey.code.courses.util.Utils;
 
 import static whiskey.code.courses.util.Constants.*;
 
@@ -19,58 +25,71 @@ import static whiskey.code.courses.util.Constants.*;
 public class CoursesBot extends TelegramLongPollingBot {
 
     private final BotProperties botProperties;
-    private final CourseButtonService courses;
-    private final LessonButtonService lessons;
+    private final CourseButtonServiceImpl courses;
+    private final LessonButtonServiceImpl lessons;
 
     @Override
     public void onUpdateReceived(Update update) {
+        //В бот пришло первое сообщение из чатбота
         if (update.hasMessage()) {
-            var chatId = update.getMessage().getChatId();
-            try {
-                execute(courses.courses(chatId, 0));
-            } catch (TelegramApiException e) {
-                throw new RuntimeException(e);
-            }
+            Message message = update.getMessage();
+
+            clearScreen(message);
+            sendMessage(courses.getButtons(message));
+
 
         } else if (update.hasChannelPost()) {
+            //В бот пришло сообщение из канала храрения уроков
             var chatId = update.getChannelPost().getChatId();
+
             if (chatId.equals(botProperties.getAdminChannel())) {
-
-                SendMessage message = new SendMessage(String.valueOf(chatId),
-                        String.valueOf(update.getChannelPost().getMessageId()));
-
-                try {
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
+                sendMessage(new SendMessage(String.valueOf(chatId),
+                        String.valueOf(update.getChannelPost().getMessageId())));
 
             }
         } else if (update.hasCallbackQuery()) {
+            //В бот пришло из инлайн клавиатуры
+
+            CallbackQuery callbackQuery = update.getCallbackQuery();
             var callbackData = update.getCallbackQuery().getData();
-            var chatId = update.getCallbackQuery().getMessage().getChatId();
 
             if (callbackData.startsWith(PAGE_COURSE)) {
-                int page = Integer.parseInt(callbackData.split("_")[1]);
-                try {
-                    execute(courses.updateCourses(chatId, page,
-                            update.getCallbackQuery().getMessage().getMessageId()));
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
+                updateMessage(courses.updateButtons(callbackQuery));
             } else if (callbackData.startsWith(PAGE_LESSON)) {
-                String[] lessonsInfo = callbackData.split("_");
-                long courseId = Long.parseLong(lessonsInfo[1]);
-                int pageLessons = Integer.parseInt(lessonsInfo[2]);
-                int pageCourses = Integer.parseInt(lessonsInfo[3]);
-
-                try {
-                    execute(lessons.updateLessons(chatId, pageLessons, pageCourses,
-                            courseId, update.getCallbackQuery().getMessage().getMessageId()));
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
+                updateMessage(lessons.updateButtons(callbackQuery));
             }
+        }
+    }
+
+
+
+
+
+    private void clearScreen(Message message){
+
+        Long chatId = message.getChatId();
+        Integer messageId = message.getMessageId();
+
+        try {
+            execute(Utils.clearScreen(chatId, messageId));
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendMessage(SendMessage message){
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void updateMessage(EditMessageText message){
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
         }
     }
 

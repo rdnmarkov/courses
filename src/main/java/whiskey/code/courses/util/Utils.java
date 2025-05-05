@@ -2,6 +2,7 @@ package whiskey.code.courses.util;
 
 import lombok.experimental.UtilityClass;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 @UtilityClass
@@ -23,5 +24,15 @@ public class Utils {
             button.setCallbackData(callbackData);
             return button;
     }
+
+    public static DeleteMessage clearScreen(Long chatId, Integer messageId) {
+        DeleteMessage deleteMessage = new DeleteMessage();
+        deleteMessage.setChatId(chatId.toString());
+        deleteMessage.setMessageId(messageId);
+
+        return deleteMessage;
+    }
+
+
 
 }
