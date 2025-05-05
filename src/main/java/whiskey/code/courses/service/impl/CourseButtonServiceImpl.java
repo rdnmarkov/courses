@@ -18,6 +18,8 @@ import static whiskey.code.courses.util.Constants.NEXT;
 import static whiskey.code.courses.util.Constants.PAGE_LESSON;
 import static whiskey.code.courses.util.Constants.PAGE_COURSE;
 import static whiskey.code.courses.util.Constants.ZERO_PAGE;
+import static whiskey.code.courses.util.Constants.DELIMITER_PAGE;
+import static whiskey.code.courses.util.Utils.navButton;
 
 
 @Service
@@ -53,29 +55,21 @@ public class CourseButtonServiceImpl implements CourseButtonService {
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        List<InlineKeyboardButton> navButtons = new ArrayList<>();
-
-        if (page > 0) {
-            InlineKeyboardButton prevButton = new InlineKeyboardButton();
-            prevButton.setText(PREVIOUS);
-            prevButton.setCallbackData(PAGE_COURSE + (page - 1));
-            navButtons.add(prevButton);
-        }
 
         pageCourses.get().forEach(course -> {
                     InlineKeyboardButton button = new InlineKeyboardButton();
                     button.setText(course.getTitle());
-                    button.setCallbackData(PAGE_LESSON + course.getId() + ZERO_PAGE);
+                    button.setCallbackData(PAGE_LESSON + course.getId()
+                            + ZERO_PAGE + DELIMITER_PAGE + page);
                     rows.add(List.of(button));
                 }
         );
 
-        if (pageCourses.hasNext()) {
-            InlineKeyboardButton nextButton = new InlineKeyboardButton();
-            nextButton.setText(NEXT);
-            nextButton.setCallbackData(PAGE_COURSE + (page + 1));
-            navButtons.add(nextButton);
-        }
+        List<InlineKeyboardButton> navButtons = new ArrayList<>();
+
+        if(page > 0) navButtons.add(navButton(PREVIOUS, PAGE_COURSE + (page - 1)));
+
+        if(pageCourses.hasNext()) navButtons.add(navButton(NEXT, PAGE_COURSE + (page + 1)));
 
         if (!navButtons.isEmpty()) {
             rows.add(navButtons);
@@ -84,5 +78,6 @@ public class CourseButtonServiceImpl implements CourseButtonService {
         markup.setKeyboard(rows);
         return markup;
     }
+
 
 }

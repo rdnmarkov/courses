@@ -61,11 +61,12 @@ public class CoursesBot extends TelegramLongPollingBot {
             } else if (callbackData.startsWith(PAGE_LESSON)) {
                 String[] lessonsInfo = callbackData.split("_");
                 long courseId = Long.parseLong(lessonsInfo[1]);
-                int page = Integer.parseInt(lessonsInfo[2]);
+                int pageLessons = Integer.parseInt(lessonsInfo[2]);
+                int pageCourses = Integer.parseInt(lessonsInfo[3]);
 
                 try {
-                    execute(lessons.updateLessons(chatId, page, courseId,
-                            update.getCallbackQuery().getMessage().getMessageId()));
+                    execute(lessons.updateLessons(chatId, pageLessons, pageCourses,
+                            courseId, update.getCallbackQuery().getMessage().getMessageId()));
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }
