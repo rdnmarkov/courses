@@ -7,79 +7,71 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import whiskey.code.courses.entity.Course;
-import whiskey.code.courses.service.ButtonService;
-import whiskey.code.courses.service.db.CourseService;
+import whiskey.code.courses.entity.Lesson;
+import whiskey.code.courses.service.LessonButtonService;
+import whiskey.code.courses.service.db.LessonService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static whiskey.code.courses.util.Constants.PREVIOUS;
+import static whiskey.code.courses.util.Constants.NEXT;
+import static whiskey.code.courses.util.Constants.LESSON;
+import static whiskey.code.courses.util.Constants.PAGE_LESSON;
+
+
 @Service
 @RequiredArgsConstructor
-public class ButtonServiceImpl implements ButtonService {
+public class LessonButtonServiceImpl implements LessonButtonService {
 
-    private final CourseService courseService;
-    private final static String TEXT = "📚 Выберите курс:";
-    private final static String PREVIOUS = "◀ Назад";
-    private final static String NEXT = "Далее ▶";
-    private final static String PAGE = "page_";
-    private final static String COURSE = "course_";
+    private final LessonService lessonService;
+    private final static String TEXT = "📚 Выберите урок:";
 
-    public SendMessage courses(Long chatId, int page) {
-
-        return SendMessage.builder()
-                .chatId(String.valueOf(chatId))
-                .text(TEXT)
-                .replyMarkup(coursesButtons(page)).build();
-    }
-
-    public EditMessageText updateCourses(Long chatId, int page, Integer messageId){
-
+    @Override
+    public EditMessageText updateLessons(Long chatId, int page, Long courseId, Integer messageId) {
         return EditMessageText.builder()
                 .chatId(String.valueOf(chatId))
                 .messageId(messageId)
                 .text(TEXT)
-                .replyMarkup(coursesButtons(page))
+                .replyMarkup(lessonsButtons(courseId, page))
                 .build();
-
     }
 
-    private InlineKeyboardMarkup coursesButtons(int page) {
+    private InlineKeyboardMarkup lessonsButtons(Long courseId, int page) {
 
-        Page<Course> pageCourses = courseService.findByVisibilityTruePage(page);
+        Page<Lesson> lessonPage = lessonService.findByPage(courseId, page);
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         List<InlineKeyboardButton> navButtons = new ArrayList<>();
 
-        if(page >0){
+        if (page > 0) {
             InlineKeyboardButton prevButton = new InlineKeyboardButton();
             prevButton.setText(PREVIOUS);
-            prevButton.setCallbackData(PAGE + (page - 1));
+            prevButton.setCallbackData(PAGE_LESSON + courseId + "_" + (page - 1));
             navButtons.add(prevButton);
         }
 
-        pageCourses.get().forEach(course -> {
+        lessonPage.get().forEach(lesson -> {
                     InlineKeyboardButton button = new InlineKeyboardButton();
-                    button.setText(course.getTitle());
-                    button.setCallbackData(COURSE + course.getId());
+                    button.setText(lesson.getTitle());
+                    button.setCallbackData(LESSON + lesson.getId());
                     rows.add(List.of(button));
                 }
         );
 
-        if(pageCourses.hasNext()){
+        if (lessonPage.hasNext()) {
             InlineKeyboardButton nextButton = new InlineKeyboardButton();
             nextButton.setText(NEXT);
-            nextButton.setCallbackData(PAGE + (page + 1));
+            nextButton.setCallbackData(PAGE_LESSON + courseId + "_" + (page + 1));
             navButtons.add(nextButton);
         }
 
-        if(!navButtons.isEmpty()){
+        if (!navButtons.isEmpty()) {
             rows.add(navButtons);
         }
 
         markup.setKeyboard(rows);
         return markup;
     }
-
 }

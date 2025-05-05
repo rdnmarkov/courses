@@ -8,7 +8,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import whiskey.code.courses.config.properties.BotProperties;
-import whiskey.code.courses.service.ButtonService;
+import whiskey.code.courses.service.CourseButtonService;
+import whiskey.code.courses.service.LessonButtonService;
+
+import static whiskey.code.courses.util.Constants.*;
 
 @Slf4j
 @Service
@@ -16,14 +19,15 @@ import whiskey.code.courses.service.ButtonService;
 public class CoursesBot extends TelegramLongPollingBot {
 
     private final BotProperties botProperties;
-    private final ButtonService buttonService;
+    private final CourseButtonService courses;
+    private final LessonButtonService lessons;
 
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
             var chatId = update.getMessage().getChatId();
             try {
-                execute(buttonService.courses(chatId, 0));
+                execute(courses.courses(chatId, 0));
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -42,14 +46,25 @@ public class CoursesBot extends TelegramLongPollingBot {
                 }
 
             }
-        }else if (update.hasCallbackQuery()) {
+        } else if (update.hasCallbackQuery()) {
             var callbackData = update.getCallbackQuery().getData();
             var chatId = update.getCallbackQuery().getMessage().getChatId();
 
-            if (callbackData.startsWith("page_")) {
+            if (callbackData.startsWith(PAGE_COURSE)) {
                 int page = Integer.parseInt(callbackData.split("_")[1]);
                 try {
-                    execute(buttonService.updateCourses(chatId, page,
+                    execute(courses.updateCourses(chatId, page,
+                            update.getCallbackQuery().getMessage().getMessageId()));
+                } catch (TelegramApiException e) {
+                    throw new RuntimeException(e);
+                }
+            } else if (callbackData.startsWith(PAGE_LESSON)) {
+                String[] lessonsInfo = callbackData.split("_");
+                long courseId = Long.parseLong(lessonsInfo[1]);
+                int page = Integer.parseInt(lessonsInfo[2]);
+
+                try {
+                    execute(lessons.updateLessons(chatId, page, courseId,
                             update.getCallbackQuery().getMessage().getMessageId()));
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);

@@ -9,3 +9,4 @@ docker run --name postgres-courses -e POSTGRES_USER=postgres -e POSTGRES_PASSWOR
 - создать таблицы в бд
 - вывод кнопок в телеграм-боте (курсы)
 - вывод кнопок (курсы) постраничный пагинация
+- вывод кнопок в телеграм-боте (уроки)
