@@ -4,8 +4,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Constants {
-    public final static String PREVIOUS = "◀ Назад";
-    public final static String NEXT = "Далее ▶";
+    public final static String PREVIOUS = "\uD83D\uDD19 Назад";
+    public final static String NEXT = "Далее ➡\uFE0F \uD83D\uDCA8";
     public final static String PAGE_COURSE = "pg-course_";
     public final static String PAGE_LESSON = "pg-lesson_";
     public final static String LESSON = "lesson_";

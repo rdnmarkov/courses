@@ -81,9 +81,6 @@ public class CoursesBot extends TelegramLongPollingBot {
                                         messageId)));
 
                 sendMessage(lessonButtonService.getButtons(null, callbackQuery));
-            } else if (callbackData.startsWith("/clear")) {
-                //очистка экрана
-                clearScreen(callbackQuery.getMessage().getChatId(), callbackQuery.getMessage().getMessageId());
             }
         }
     }

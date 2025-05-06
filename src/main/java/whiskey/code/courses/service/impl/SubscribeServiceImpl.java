@@ -49,7 +49,6 @@ public class SubscribeServiceImpl implements SubscribeService {
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText(SUBSCRIBE);
         button.setUrl(LINK);
-        button.setCallbackData("/clear");
 
         markup.setKeyboard(List.of(List.of(button)));
         message.setReplyMarkup(markup);

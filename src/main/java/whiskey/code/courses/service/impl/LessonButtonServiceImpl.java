@@ -25,8 +25,8 @@ import static whiskey.code.courses.util.Utils.navButton;
 public class LessonButtonServiceImpl implements ButtonService {
 
     private final LessonService lessonService;
-    private final static String TEXT = "📚 Выберите урок:";
-    private final static String BACK_TO_COURSE = "📚 Назад к курсам ◀";
+    private final static String TEXT = "\uD83C\uDF44 Выберите урок:";
+    private final static String BACK_TO_COURSE = "\uD83C\uDFF0 Назад к курсам \uD83D\uDD19";
 
     @Override
     public EditMessageText updateButtons(CallbackQuery callbackQuery) {

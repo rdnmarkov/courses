@@ -29,7 +29,7 @@ import static whiskey.code.courses.util.Utils.navButton;
 public class CourseButtonServiceImpl implements ButtonService {
 
     private final whiskey.code.courses.service.db.CourseService courseService;
-    private final static String TEXT = "📚 Выберите курс:";
+    private final static String TEXT = "\uD83C\uDFF0 Выберите курс:";
 
 
     public SendMessage getButtons(Message message, CallbackQuery callbackQuery) {
