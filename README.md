@@ -13,3 +13,4 @@ docker run --name postgres-courses -e POSTGRES_USER=postgres -e POSTGRES_PASSWOR
 - очистка экрана после получения действия
 - Вывод уроков по нажатию на урок
 - Создание админ панели
+- Проверка подписки

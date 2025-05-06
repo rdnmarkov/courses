@@ -9,9 +9,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import whiskey.code.courses.config.properties.BotProperties;
 import whiskey.code.courses.service.AdminPanelService;
+import whiskey.code.courses.service.SubscribeService;
 import whiskey.code.courses.service.db.LessonService;
 import whiskey.code.courses.service.impl.CourseButtonServiceImpl;
 import whiskey.code.courses.service.impl.LessonButtonServiceImpl;
@@ -29,16 +31,21 @@ public class CoursesBot extends TelegramLongPollingBot {
     private final LessonButtonServiceImpl lessonButtonService;
     private final LessonService lessonService;
     private final AdminPanelService adminPanelService;
+    private final SubscribeService subscribeService;
 
     @Override
     public void onUpdateReceived(Update update) {
         //В бот пришло первое сообщение из чатбота
+
         if (update.hasMessage()) {
             var message = update.getMessage();
 
-            clearScreen(message);
-            sendMessage(courseButtonService.getButtons(message, null));
-
+            clearScreen(message.getChatId(), message.getMessageId());
+            if(!subscribeService.isMember(sendMemberReq(message))){
+                sendMessage(subscribeService.sendSubscriptionRequestMes(message.getChatId()));
+            }else{
+                sendMessage(courseButtonService.getButtons(message, null));
+            }
 
         } else if (update.hasChannelPost()) {
             //В бот пришло сообщение из канала хранения уроков
@@ -61,6 +68,7 @@ public class CoursesBot extends TelegramLongPollingBot {
                 updateMessage(lessonButtonService.updateButtons(callbackQuery));
             } else if (callbackData.startsWith(LESSON)) {
                 //пересылка уроков
+                clearScreen(callbackQuery.getMessage().getChatId(), callbackQuery.getMessage().getMessageId());
 
                 var lessonId = Long.parseLong(callbackQuery.getData().split("_")[1]);
 
@@ -73,14 +81,14 @@ public class CoursesBot extends TelegramLongPollingBot {
                                         messageId)));
 
                 sendMessage(lessonButtonService.getButtons(null, callbackQuery));
+            } else if (callbackData.startsWith("/clear")) {
+                //очистка экрана
+                clearScreen(callbackQuery.getMessage().getChatId(), callbackQuery.getMessage().getMessageId());
             }
         }
     }
 
-    private void clearScreen(Message message){
-
-        Long chatId = message.getChatId();
-        Integer messageId = message.getMessageId();
+    private void clearScreen(Long chatId, Integer messageId){
 
         try {
             execute(Utils.clearScreen(chatId, messageId));
@@ -108,6 +116,14 @@ public class CoursesBot extends TelegramLongPollingBot {
     private void forwardMessage(ForwardMessage message){
         try {
             execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private ChatMember sendMemberReq(Message message){
+        try {
+            return execute(subscribeService.getMember(message.getFrom().getId()));
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
