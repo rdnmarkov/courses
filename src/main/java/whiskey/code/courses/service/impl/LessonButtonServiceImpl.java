@@ -57,7 +57,10 @@ public class LessonButtonServiceImpl implements ButtonService {
         lessonPage.get().forEach(lesson -> {
                     InlineKeyboardButton button = new InlineKeyboardButton();
                     button.setText(lesson.getTitle());
-                    button.setCallbackData(LESSON + lesson.getId());
+                    button.setCallbackData(LESSON + lesson.getId() +
+                            DELIMITER_PAGE + courseId +
+                            DELIMITER_PAGE + pageLessons +
+                            DELIMITER_PAGE + pageCourses);
                     rows.add(List.of(button));
                 }
         );
@@ -65,12 +68,14 @@ public class LessonButtonServiceImpl implements ButtonService {
         List<InlineKeyboardButton> navButtons = new ArrayList<>();
 
         if (pageLessons > 0) navButtons.add(navButton(PREVIOUS,
-                PAGE_LESSON + courseId + DELIMITER_PAGE + (pageLessons - 1)
-                        + DELIMITER_PAGE + pageCourses));
+                PAGE_LESSON + courseId +
+                        DELIMITER_PAGE + (pageLessons - 1) +
+                        DELIMITER_PAGE + pageCourses));
 
         if (lessonPage.hasNext()) navButtons.add(navButton(NEXT,
-                PAGE_LESSON + courseId + DELIMITER_PAGE + (pageLessons + 1)
-                        + DELIMITER_PAGE + pageCourses));
+                PAGE_LESSON + courseId +
+                        DELIMITER_PAGE + (pageLessons + 1) +
+                        DELIMITER_PAGE + pageCourses));
 
         if (!navButtons.isEmpty()) {
             rows.add(navButtons);
@@ -83,7 +88,17 @@ public class LessonButtonServiceImpl implements ButtonService {
     }
 
     @Override
-    public SendMessage getButtons(Message message) {
-        return null;
+    public SendMessage getButtons(Message message, CallbackQuery callbackQuery) {
+        Long chatId = callbackQuery.getMessage().getChatId();
+
+        String[] lessonsInfo = callbackQuery.getData().split("_");
+        long courseId = Long.parseLong(lessonsInfo[2]);
+        int pageLessons = Integer.parseInt(lessonsInfo[3]);
+        int pageCourses = Integer.parseInt(lessonsInfo[4]);
+
+        return SendMessage.builder()
+                .chatId(String.valueOf(chatId))
+                .text(TEXT)
+                .replyMarkup(lessonsButtons(courseId, pageLessons, pageCourses)).build();
     }
 }

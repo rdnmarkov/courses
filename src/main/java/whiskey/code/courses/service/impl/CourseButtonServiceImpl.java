@@ -32,7 +32,7 @@ public class CourseButtonServiceImpl implements ButtonService {
     private final static String TEXT = "📚 Выберите курс:";
 
 
-    public SendMessage getButtons(Message message) {
+    public SendMessage getButtons(Message message, CallbackQuery callbackQuery) {
 
         Long chatId = message.getChatId();
 

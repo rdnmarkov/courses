@@ -11,4 +11,20 @@ public class Constants {
     public final static String LESSON = "lesson_";
     public final static String ZERO_PAGE = "_0";
     public final static String DELIMITER_PAGE = "_";
+
+    // Course commands
+    public static final String CREATE_COURSE = "/c_c ";
+    public static final String UPDATE_COURSE_FULL = "/u_c_f ";
+    public static final String UPDATE_COURSE_TITLE = "/u_c_t ";
+    public static final String UPDATE_COURSE_VISIBILITY = "/u_c_v ";
+    public static final String DELETE_COURSE = "/d_c ";
+
+    // Lesson commands
+    public static final String CREATE_LESSON = "/c_l ";
+    public static final String UPDATE_LESSON_FULL = "/u_l_f ";
+    public static final String UPDATE_LESSON_TITLE = "/u_l_t ";
+    public static final String UPDATE_LESSON_COURSE = "/u_l_c ";
+    public static final String UPDATE_LESSON_MESSAGE = "/u_l_m ";
+    public static final String UPDATE_LESSON_ORDER = "/u_l_o ";
+    public static final String DELETE_LESSON = "/d_l ";
 }

@@ -16,8 +16,18 @@ import java.util.List;
 @Builder
 public class Lesson {
 
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", orderNumber=" + orderNumber +
+                ", messageIds=" + messageIds +
+                '}';
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "lesson_id")
     private Long id;
 

@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 public interface ButtonService {
 
-    SendMessage getButtons(Message message);
+    SendMessage getButtons(Message message, CallbackQuery callbackQuery);
 
     EditMessageText updateButtons(CallbackQuery callbackQuery);
 }
