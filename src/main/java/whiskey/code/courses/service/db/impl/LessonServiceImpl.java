@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import whiskey.code.courses.entity.Course;
 import whiskey.code.courses.entity.Lesson;
 import whiskey.code.courses.repository.CourseRepository;
@@ -113,5 +114,14 @@ public class LessonServiceImpl implements LessonService {
 
     public void deleteLesson(String command) {
         lessonRepository.deleteById(Long.parseLong(command));
+    }
+
+    @Override
+    public int getPercent(CallbackQuery callbackQuery, Integer curOrderNum) {
+
+        String[] lessonsInfo = callbackQuery.getData().split("_");
+        long courseId = Long.parseLong(lessonsInfo[2]);
+
+        return (int) Math.round(lessonRepository.calculateCompletionPercentage(courseId, curOrderNum));
     }
 }

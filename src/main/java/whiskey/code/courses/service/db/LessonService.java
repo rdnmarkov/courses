@@ -1,6 +1,7 @@
 package whiskey.code.courses.service.db;
 
 import org.springframework.data.domain.Page;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import whiskey.code.courses.entity.Lesson;
 
 public interface LessonService {
@@ -22,5 +23,7 @@ public interface LessonService {
     Lesson updateLessonOrderNumber(String command);
 
     void deleteLesson(String command);
+
+    int getPercent(CallbackQuery callbackQuery, Integer curOrderNum);
 
 }

@@ -80,6 +80,9 @@ public class CoursesBot extends TelegramLongPollingBot {
                                         botProperties.getAdminChannel(),
                                         messageId)));
 
+                sendMessage(Utils.messageSeparator(chatId,
+                                lessonService.getPercent(callbackQuery, lesson.getOrderNumber())));
+
                 sendMessage(lessonButtonService.getButtons(null, callbackQuery));
             }
         }

@@ -11,6 +11,10 @@ public class Constants {
     public final static String LESSON = "lesson_";
     public final static String ZERO_PAGE = "_0";
     public final static String DELIMITER_PAGE = "_";
+    public final static int TOTAL_LENGTH = 20;
+    public final static String FILLED_SYMBOL = "▓";
+    public final static String EMPTY_SYMBOL = "▒";
+    public final static String DELIMITER = " ";
 
     // Course commands
     public static final String CREATE_COURSE = "/c_c ";

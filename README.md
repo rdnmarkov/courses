@@ -14,3 +14,4 @@ docker run --name postgres-courses -e POSTGRES_USER=postgres -e POSTGRES_PASSWOR
 - Вывод уроков по нажатию на урок
 - Создание админ панели
 - Проверка подписки
+- добавление разделительной строки в виде процентов
