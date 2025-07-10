@@ -2,9 +2,14 @@ package whiskey.code.courses.util;
 
 import lombok.experimental.UtilityClass;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import whiskey.code.courses.bot.CoursesBot;
 
 import static whiskey.code.courses.util.Constants.TOTAL_LENGTH;
 import static whiskey.code.courses.util.Constants.FILLED_SYMBOL;
@@ -64,4 +69,45 @@ public class Utils {
         return separator;
     }
 
+
+    public static void clearScreen(Long chatId, Integer messageId, CoursesBot bot){
+
+        try {
+            bot.execute(Utils.clearScreen(chatId, messageId));
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void sendMessage(SendMessage message, CoursesBot bot){
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateMessage(EditMessageText message, CoursesBot bot){
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void forwardMessage(ForwardMessage message, CoursesBot bot){
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ChatMember sendMemberReq(GetChatMember member, CoursesBot bot){
+        try {
+            return bot.execute(member);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

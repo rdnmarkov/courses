@@ -10,11 +10,9 @@ import whiskey.code.courses.entity.Course;
 import whiskey.code.courses.entity.Lesson;
 import whiskey.code.courses.repository.CourseRepository;
 import whiskey.code.courses.repository.LessonRepository;
-import whiskey.code.courses.service.db.CourseService;
 import whiskey.code.courses.service.db.LessonService;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Service
