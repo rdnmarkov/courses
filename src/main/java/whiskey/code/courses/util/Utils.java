@@ -1,6 +1,7 @@
 package whiskey.code.courses.util;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
@@ -14,7 +15,7 @@ import whiskey.code.courses.bot.CoursesBot;
 
 import static whiskey.code.courses.util.Constants.*;
 
-
+@Slf4j
 @UtilityClass
 public class Utils {
 
@@ -73,7 +74,7 @@ public class Utils {
         try {
             bot.execute(Utils.clearScreen(chatId, messageId));
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
     }
 
@@ -82,7 +83,7 @@ public class Utils {
         try {
             bot.execute(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
     }
 
@@ -91,7 +92,7 @@ public class Utils {
         try {
             bot.execute(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
     }
 
@@ -100,7 +101,7 @@ public class Utils {
         try {
             bot.execute(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
     }
 
