@@ -18,7 +18,13 @@ public class UsualMessageHandlerImpl implements MessageHandler {
     private final SubscribeService subscribeService;
 
     @Override
+    public boolean canHandle(Update update) {
+        return update.hasMessage();
+    }
+
+    @Override
     public void handle(Update update, CoursesBot bot) {
+        //В бот пришло сообщение из чатбота
         var message = update.getMessage();
 
         Utils.clearScreen(message.getChatId(), message.getMessageId(), bot);

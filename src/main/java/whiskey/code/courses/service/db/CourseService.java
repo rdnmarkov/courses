@@ -1,10 +1,7 @@
 package whiskey.code.courses.service.db;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import whiskey.code.courses.entity.Course;
-
-import java.util.List;
 
 public interface CourseService {
 

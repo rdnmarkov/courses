@@ -3,8 +3,7 @@ package whiskey.code.courses.service.handler;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import whiskey.code.courses.bot.CoursesBot;
 
-public interface MessageHandler {
-    boolean canHandle(Update update);
+public interface RouterHandler {
 
-    void handle(Update update, CoursesBot bot);
+    void route(Update update, CoursesBot bot);
 }

@@ -18,8 +18,13 @@ public class ChannelPostHandlerImpl implements MessageHandler {
     private final AdminPanelService adminPanelService;
 
     @Override
-    public void handle(Update update, CoursesBot bot) {
+    public boolean canHandle(Update update) {
+        return update.hasChannelPost();
+    }
 
+    @Override
+    public void handle(Update update, CoursesBot bot) {
+        //В бот пришло сообщение из канала хранения уроков
         var chatId = update.getChannelPost().getChatId();
         Message channelPost = update.getChannelPost();
 

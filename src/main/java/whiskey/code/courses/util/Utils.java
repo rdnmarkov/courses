@@ -1,6 +1,7 @@
 package whiskey.code.courses.util;
 
 import lombok.experimental.UtilityClass;
+import org.springframework.scheduling.annotation.Async;
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,10 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import whiskey.code.courses.bot.CoursesBot;
 
-import static whiskey.code.courses.util.Constants.TOTAL_LENGTH;
-import static whiskey.code.courses.util.Constants.FILLED_SYMBOL;
-import static whiskey.code.courses.util.Constants.EMPTY_SYMBOL;
-import static whiskey.code.courses.util.Constants.DELIMITER;
+import static whiskey.code.courses.util.Constants.*;
 
 
 @UtilityClass
@@ -31,10 +29,10 @@ public class Utils {
 
     public static InlineKeyboardButton navButton(String text,
                                                  String callbackData) {
-            InlineKeyboardButton button = new InlineKeyboardButton();
-            button.setText(text);
-            button.setCallbackData(callbackData);
-            return button;
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(text);
+        button.setCallbackData(callbackData);
+        return button;
     }
 
     public static DeleteMessage clearScreen(Long chatId, Integer messageId) {
@@ -69,8 +67,8 @@ public class Utils {
         return separator;
     }
 
-
-    public static void clearScreen(Long chatId, Integer messageId, CoursesBot bot){
+    @Async
+    public static void clearScreen(Long chatId, Integer messageId, CoursesBot bot) {
 
         try {
             bot.execute(Utils.clearScreen(chatId, messageId));
@@ -79,7 +77,8 @@ public class Utils {
         }
     }
 
-    public static void sendMessage(SendMessage message, CoursesBot bot){
+    @Async
+    public static void sendMessage(SendMessage message, CoursesBot bot) {
         try {
             bot.execute(message);
         } catch (TelegramApiException e) {
@@ -87,7 +86,8 @@ public class Utils {
         }
     }
 
-    public static void updateMessage(EditMessageText message, CoursesBot bot){
+    @Async
+    public static void updateMessage(EditMessageText message, CoursesBot bot) {
         try {
             bot.execute(message);
         } catch (TelegramApiException e) {
@@ -95,7 +95,8 @@ public class Utils {
         }
     }
 
-    public static void forwardMessage(ForwardMessage message, CoursesBot bot){
+    @Async
+    public static void forwardMessage(ForwardMessage message, CoursesBot bot) {
         try {
             bot.execute(message);
         } catch (TelegramApiException e) {
@@ -103,7 +104,8 @@ public class Utils {
         }
     }
 
-    public ChatMember sendMemberReq(GetChatMember member, CoursesBot bot){
+    @Async
+    public ChatMember sendMemberReq(GetChatMember member, CoursesBot bot) {
         try {
             return bot.execute(member);
         } catch (TelegramApiException e) {

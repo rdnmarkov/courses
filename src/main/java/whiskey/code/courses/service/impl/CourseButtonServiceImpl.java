@@ -15,12 +15,7 @@ import whiskey.code.courses.service.ButtonService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static whiskey.code.courses.util.Constants.PREVIOUS;
-import static whiskey.code.courses.util.Constants.NEXT;
-import static whiskey.code.courses.util.Constants.PAGE_LESSON;
-import static whiskey.code.courses.util.Constants.PAGE_COURSE;
-import static whiskey.code.courses.util.Constants.ZERO_PAGE;
-import static whiskey.code.courses.util.Constants.DELIMITER_PAGE;
+import static whiskey.code.courses.util.Constants.*;
 import static whiskey.code.courses.util.Utils.navButton;
 
 
@@ -75,9 +70,9 @@ public class CourseButtonServiceImpl implements ButtonService {
 
         List<InlineKeyboardButton> navButtons = new ArrayList<>();
 
-        if(page > 0) navButtons.add(navButton(PREVIOUS, PAGE_COURSE + (page - 1)));
+        if (page > 0) navButtons.add(navButton(PREVIOUS, PAGE_COURSE + (page - 1)));
 
-        if(pageCourses.hasNext()) navButtons.add(navButton(NEXT, PAGE_COURSE + (page + 1)));
+        if (pageCourses.hasNext()) navButtons.add(navButton(NEXT, PAGE_COURSE + (page + 1)));
 
         if (!navButtons.isEmpty()) {
             rows.add(navButtons);

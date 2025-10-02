@@ -27,7 +27,13 @@ public class CallbackQueryHandlerImpl implements MessageHandler {
     private final SubscribeService subscribeService;
 
     @Override
+    public boolean canHandle(Update update) {
+        return update.hasCallbackQuery();
+    }
+
+    @Override
     public void handle(Update update, CoursesBot bot) {
+        //В бот пришло из инлайн клавиатуры
         var callbackQuery = update.getCallbackQuery();
         var callbackData = callbackQuery.getData();
         Message message = callbackQuery.getMessage();

@@ -23,13 +23,13 @@ public class LessonServiceImpl implements LessonService {
     private final CourseRepository courseRepository;
 
 
-    public Page<Lesson> findByPage(Long courseId, int offset){
+    public Page<Lesson> findByPage(Long courseId, int offset) {
         final int PAGE_SIZE = 10;
-        var page = PageRequest.of(offset,PAGE_SIZE);
+        var page = PageRequest.of(offset, PAGE_SIZE);
         return lessonRepository.findLessonsByCourse(courseId, page);
     }
 
-    public Lesson findLesson(Long lessonId){
+    public Lesson findLesson(Long lessonId) {
         return lessonRepository.findById(lessonId).get();
     }
 

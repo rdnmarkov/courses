@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import whiskey.code.courses.config.properties.BotProperties;
-import whiskey.code.courses.service.handler.MessageHandler;
+import whiskey.code.courses.service.handler.RouterHandler;
+
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -14,23 +16,13 @@ import whiskey.code.courses.service.handler.MessageHandler;
 public class CoursesBot extends TelegramLongPollingBot {
 
     private final BotProperties botProperties;
-    private final MessageHandler channelPostHandler;
-    private final MessageHandler usualMessageHandler;
-    private final MessageHandler callbackQueryHandler;
+    private final RouterHandler handle;
 
     @Override
     public void onUpdateReceived(Update update) {
-
-        if (update.hasMessage()) {
-            //В бот пришло сообщение из чатбота
-            usualMessageHandler.handle(update, this);
-        } else if (update.hasChannelPost()) {
-            //В бот пришло сообщение из канала хранения уроков
-            channelPostHandler.handle(update, this);
-        } else if (update.hasCallbackQuery()) {
-            //В бот пришло из инлайн клавиатуры
-            callbackQueryHandler.handle(update,this );
-        }
+        CompletableFuture.runAsync(() -> {
+            handle.route(update, this);
+        });
     }
 
     @Override

@@ -1,4 +1,5 @@
 package whiskey.code.courses.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 

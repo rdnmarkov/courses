@@ -15,9 +15,9 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
 
-    public Page<Course> findByVisibilityTruePage(int offset){
+    public Page<Course> findByVisibilityTruePage(int offset) {
         final int PAGE_SIZE = 10;
-        var page = PageRequest.of(offset,PAGE_SIZE);
+        var page = PageRequest.of(offset, PAGE_SIZE);
         return courseRepository.findByVisibilityTrue(page);
     }
 
