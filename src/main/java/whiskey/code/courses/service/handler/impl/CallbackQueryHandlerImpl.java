@@ -9,7 +9,7 @@ import whiskey.code.courses.bot.CoursesBot;
 import whiskey.code.courses.config.properties.BotProperties;
 import whiskey.code.courses.service.SubscribeService;
 import whiskey.code.courses.service.db.LessonService;
-import whiskey.code.courses.service.handler.MessageHandler;
+import whiskey.code.courses.service.handler.UpdateHandler;
 import whiskey.code.courses.service.impl.CourseButtonServiceImpl;
 import whiskey.code.courses.service.impl.LessonButtonServiceImpl;
 import whiskey.code.courses.util.Utils;
@@ -18,7 +18,7 @@ import static whiskey.code.courses.util.Constants.*;
 
 @Service("callbackQueryHandler")
 @RequiredArgsConstructor
-public class CallbackQueryHandlerImpl implements MessageHandler {
+public class CallbackQueryHandlerImpl implements UpdateHandler {
 
     private final BotProperties botProperties;
     private final CourseButtonServiceImpl courseButtonService;

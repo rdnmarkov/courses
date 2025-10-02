@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import whiskey.code.courses.bot.CoursesBot;
-import whiskey.code.courses.service.handler.MessageHandler;
 import whiskey.code.courses.service.handler.RouterHandler;
+import whiskey.code.courses.service.handler.UpdateHandler;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RouterHandlerImpl implements RouterHandler {
 
-    private final List<MessageHandler> handlers;
+    private final List<UpdateHandler> handlers;
 
     public void route(Update update, CoursesBot bot) {
-        for (MessageHandler handler : handlers) {
+        for (UpdateHandler handler : handlers) {
             if (handler.canHandle(update)) {
                 handler.handle(update, bot);
                 return;

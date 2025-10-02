@@ -6,13 +6,13 @@ import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMem
 import org.telegram.telegrambots.meta.api.objects.Update;
 import whiskey.code.courses.bot.CoursesBot;
 import whiskey.code.courses.service.SubscribeService;
-import whiskey.code.courses.service.handler.MessageHandler;
+import whiskey.code.courses.service.handler.UpdateHandler;
 import whiskey.code.courses.service.impl.CourseButtonServiceImpl;
 import whiskey.code.courses.util.Utils;
 
-@Service("usualMessageHandler")
+@Service("messageHandler")
 @RequiredArgsConstructor
-public class UsualMessageHandlerImpl implements MessageHandler {
+public class MessageHandlerImpl implements UpdateHandler {
 
     private final CourseButtonServiceImpl courseButtonService;
     private final SubscribeService subscribeService;

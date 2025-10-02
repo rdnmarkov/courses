@@ -7,12 +7,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import whiskey.code.courses.bot.CoursesBot;
 import whiskey.code.courses.config.properties.BotProperties;
 import whiskey.code.courses.service.AdminPanelService;
-import whiskey.code.courses.service.handler.MessageHandler;
+import whiskey.code.courses.service.handler.UpdateHandler;
 import whiskey.code.courses.util.Utils;
 
 @Service("channelPostHandler")
 @RequiredArgsConstructor
-public class ChannelPostHandlerImpl implements MessageHandler {
+public class ChannelPostHandlerImpl implements UpdateHandler {
 
     private final BotProperties botProperties;
     private final AdminPanelService adminPanelService;
