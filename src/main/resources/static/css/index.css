@@ -1,0 +1,158 @@
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #1a0029, #090014);
+    font-family: 'VT323', monospace;
+    color: #e7dbff;
+}
+
+/* MOBILE APP WIDTH */
+.app-wrapper {
+    max-width: 420px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+/* HEADER */
+.mobile-header {
+    height: 56px;
+    background: rgba(30,0,60,0.95);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-bottom: 2px solid #ff00ff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.burger-btn {
+    font-size: 26px;
+    background: none;
+    border: none;
+    color: #ff4df7;
+}
+
+.header-title {
+    margin-left: 12px;
+    font-family: 'Press Start 2P';
+    font-size: 12px;
+    color: #ff76ff;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100vh;
+    background: rgba(30,0,60,0.95);
+    padding: 20px;
+    transition: left 0.3s;
+    z-index: 1100;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar h5 {
+    font-family: 'Press Start 2P';
+    font-size: 12px;
+    color: #ff4df7;
+    margin-bottom: 16px;
+}
+
+/* OVERLAY */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    z-index: 1050;
+}
+
+.sidebar-overlay.show {
+    display: block;
+}
+
+/* CATEGORIES */
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 18px;
+}
+
+.category-item input {
+    accent-color: #ff00e1;
+}
+
+/* CONTENT */
+.content {
+    padding: 16px;
+}
+
+.page-title {
+    font-family: 'Press Start 2P';
+    font-size: 14px;
+    color: #ff76ff;
+    margin-bottom: 16px;
+}
+
+/* SEARCH */
+.search-box {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 10px;
+    background: rgba(30,0,60,0.8);
+    border: 2px solid #8a2eff;
+    color: #fff;
+}
+
+.search-box button {
+    padding: 10px 14px;
+    background: #ff00d4;
+    border: none;
+    font-weight: bold;
+}
+
+/* CARDS */
+.course-card {
+    background: rgba(20,0,40,0.9);
+    border: 2px solid #8a2eff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 0 10px #a64bff;
+}
+
+.course-card h5 {
+    color: #b28dff;
+}
+
+.course-card button {
+    width: 100%;
+    margin-top: 10px;
+    background: #ff00d4;
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+}
+
+/* PAGINATION */
+.pagination .page-link {
+    background: rgba(50,0,80,0.8);
+    border: 1px solid #8a2eff;
+    color: #fff;
+}
+
+.page-item.active .page-link {
+    background: #ff00e1;
+    color: black;
+}

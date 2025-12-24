@@ -10,8 +10,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import whiskey.code.courses.config.properties.BotProperties;
+import whiskey.code.courses.entity.Category;
 import whiskey.code.courses.entity.Course;
 import whiskey.code.courses.service.ButtonService;
+import whiskey.code.courses.service.db.CategoryService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,11 @@ import static whiskey.code.courses.util.Utils.navButton;
 
 @Service
 @RequiredArgsConstructor
-public class CourseButtonServiceImpl implements ButtonService {
+public class CategoryButtonServiceImpl implements ButtonService {
 
-    private final whiskey.code.courses.service.db.CourseService courseService;
+    private final CategoryService categoryService;
     private final BotProperties botProperties;
-    private final static String TEXT = "\uD83C\uDFF0 Выберите курс:";
+    private final static String TEXT = "\uD83C\uDFF0 Выберите категорию:";
 
 
     public SendMessage getButtons(Message message, CallbackQuery callbackQuery) {
@@ -37,7 +39,7 @@ public class CourseButtonServiceImpl implements ButtonService {
         return SendMessage.builder()
                 .chatId(String.valueOf(chatId))
                 .text(TEXT)
-                .replyMarkup(coursesButtons(0, chatId)).build();
+                .replyMarkup(categoryButtons(0, chatId)).build();
     }
 
     public EditMessageText updateButtons(CallbackQuery callbackQuery) {
@@ -46,31 +48,26 @@ public class CourseButtonServiceImpl implements ButtonService {
         Integer messageId = callbackQuery.getMessage().getMessageId();
         int page = Integer.parseInt(callbackQuery.getData().split("_")[1]);
 
-        String[] lessonsInfo = callbackQuery.getData().split("_");
-        long categoryId = Long.parseLong(lessonsInfo[2]);
-        int pageCourse = Integer.parseInt(lessonsInfo[3]);
-        int pageCategory = Integer.parseInt(lessonsInfo[4]);
-
         return EditMessageText.builder()
                 .chatId(String.valueOf(chatId))
                 .messageId(messageId)
                 .text(TEXT)
-                .replyMarkup(coursesButtons(page, chatId))
+                .replyMarkup(categoryButtons(page, chatId))
                 .build();
 
     }
 
-    private InlineKeyboardMarkup coursesButtons(int page, Long chatId) {
+    private InlineKeyboardMarkup categoryButtons(int page, Long chatId) {
 
-        Page<Course> pageCourses = courseService.findByVisibilityTruePage(page);
+        Page<Category> pageCategory = categoryService.findByVisibilityTruePage(page);
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
-        pageCourses.get().forEach(course -> {
+        pageCategory.get().forEach(category -> {
                     InlineKeyboardButton button = new InlineKeyboardButton();
-                    button.setText(course.getTitle());
-                    button.setCallbackData(PAGE_LESSON + course.getId()
+                    button.setText(category.getTitle());
+                    button.setCallbackData(PAGE_LESSON + category.getId()
                             + ZERO_PAGE + DELIMITER_PAGE + page);
                     rows.add(List.of(button));
                 }
@@ -80,7 +77,7 @@ public class CourseButtonServiceImpl implements ButtonService {
 
         if (page > 0) navButtons.add(navButton(PREVIOUS, PAGE_COURSE + (page - 1)));
 
-        if (pageCourses.hasNext()) navButtons.add(navButton(NEXT, PAGE_COURSE + (page + 1)));
+        if (pageCategory.hasNext()) navButtons.add(navButton(NEXT, PAGE_COURSE + (page + 1)));
 
         if (!navButtons.isEmpty()) {
             rows.add(navButtons);

@@ -14,5 +14,6 @@ public class BotProperties {
     private String key;
     private Long adminChannel;
     private String subChannel;
+    private String urlWeb;
 
 }

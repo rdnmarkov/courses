@@ -34,6 +34,9 @@ public class Lesson {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "order_number", nullable = false)
     private Integer orderNumber;
 

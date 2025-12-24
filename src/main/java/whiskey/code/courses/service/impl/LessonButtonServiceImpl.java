@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import whiskey.code.courses.config.properties.BotProperties;
 import whiskey.code.courses.entity.Lesson;
 import whiskey.code.courses.service.ButtonService;
 import whiskey.code.courses.service.db.LessonService;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static whiskey.code.courses.util.Constants.*;
+import static whiskey.code.courses.util.Utils.createWebAppButton;
 import static whiskey.code.courses.util.Utils.navButton;
 
 
@@ -27,6 +29,7 @@ public class LessonButtonServiceImpl implements ButtonService {
     private final LessonService lessonService;
     private final static String TEXT = "\uD83C\uDF44 Выберите урок:";
     private final static String BACK_TO_COURSE = "\uD83C\uDFF0 Назад к курсам \uD83D\uDD19";
+    private final BotProperties botProperties;
 
     @Override
     public EditMessageText updateButtons(CallbackQuery callbackQuery) {
@@ -43,11 +46,26 @@ public class LessonButtonServiceImpl implements ButtonService {
                 .chatId(String.valueOf(chatId))
                 .messageId(messageId)
                 .text(TEXT)
-                .replyMarkup(lessonsButtons(courseId, pageLessons, pageCourses))
+                .replyMarkup(lessonsButtons(courseId, pageLessons, pageCourses, chatId))
                 .build();
     }
 
-    private InlineKeyboardMarkup lessonsButtons(Long courseId, int pageLessons, int pageCourses) {
+    @Override
+    public SendMessage getButtons(Message message, CallbackQuery callbackQuery) {
+        Long chatId = callbackQuery.getMessage().getChatId();
+
+        String[] lessonsInfo = callbackQuery.getData().split("_");
+        long courseId = Long.parseLong(lessonsInfo[2]);
+        int pageLessons = Integer.parseInt(lessonsInfo[3]);
+        int pageCourses = Integer.parseInt(lessonsInfo[4]);
+
+        return SendMessage.builder()
+                .chatId(String.valueOf(chatId))
+                .text(TEXT)
+                .replyMarkup(lessonsButtons(courseId, pageLessons, pageCourses, chatId)).build();
+    }
+
+    private InlineKeyboardMarkup lessonsButtons(Long courseId, int pageLessons, int pageCourses, Long chatId) {
 
         Page<Lesson> lessonPage = lessonService.findByPage(courseId, pageLessons);
 
@@ -82,23 +100,8 @@ public class LessonButtonServiceImpl implements ButtonService {
         }
 
         rows.add(List.of(navButton(BACK_TO_COURSE, PAGE_COURSE + pageCourses)));
-
+        rows.add(List.of(createWebAppButton(chatId, botProperties.getUrlWeb())));
         markup.setKeyboard(rows);
         return markup;
-    }
-
-    @Override
-    public SendMessage getButtons(Message message, CallbackQuery callbackQuery) {
-        Long chatId = callbackQuery.getMessage().getChatId();
-
-        String[] lessonsInfo = callbackQuery.getData().split("_");
-        long courseId = Long.parseLong(lessonsInfo[2]);
-        int pageLessons = Integer.parseInt(lessonsInfo[3]);
-        int pageCourses = Integer.parseInt(lessonsInfo[4]);
-
-        return SendMessage.builder()
-                .chatId(String.valueOf(chatId))
-                .text(TEXT)
-                .replyMarkup(lessonsButtons(courseId, pageLessons, pageCourses)).build();
     }
 }

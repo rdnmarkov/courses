@@ -3,6 +3,7 @@ bot:
   key: ${BOT_KEY}
   admin-channel: ${BOT_ADMIN_CHANNEL}
   sub-channel: ${SUB_CHANNEL}
+  url-web: ${WEB_URL}
 
 spring:
   application:
@@ -14,7 +15,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: ${SHOW_SQL:true}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: ${SERVER_PORT:8080}
+  ssl:
+    enabled: ${SSL_ENABLED:false}
+    key-store: ${KEY_STORE:keystore.p12}
+    key-store-password: ${KEY_STORE_PASSWORD:123}
+    key-store-type: PKCS12
+    key-alias: springboot
