@@ -38,7 +38,7 @@ public class ApplicationController {
             @RequestParam(required = false) List<Long> categoryIds,
             @RequestParam(defaultValue = "0") int page
     ) {
-        return courseService.getCourses(categoryIds,page);
+        return courseService.getCourses(categoryIds, page);
     }
 
     @GetMapping("/search")
@@ -68,7 +68,7 @@ public class ApplicationController {
     public ResponseEntity<Void> sendMessage(@PathVariable Integer messageId,
                                             @RequestParam Long chatId) {
 
-        webAppHandler.handle(chatId,messageId);
+        webAppHandler.handle(chatId, messageId);
 
         return ResponseEntity.ok().build();
     }

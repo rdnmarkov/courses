@@ -14,7 +14,7 @@ public interface CourseService {
 
     Course findCourseBiId(Long id);
 
-    Page<Course> findByVisibilityTruePage(int offset);
+    Page<Course> findByVisibilityTruePage(int offset, Long categoryId);
 
     Course createCourse(String command);
 

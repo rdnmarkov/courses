@@ -32,7 +32,7 @@ public class EntityDTOMapper {
                 c.getLessons().stream().map(this::lessonToDto).toList());
     }
 
-    private LessonDTO lessonToDto(Lesson l){
+    private LessonDTO lessonToDto(Lesson l) {
         return new LessonDTO(l.getId(),
                 l.getTitle(),
                 l.getDescription(),

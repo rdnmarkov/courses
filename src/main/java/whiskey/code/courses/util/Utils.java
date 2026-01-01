@@ -75,7 +75,7 @@ public class Utils {
         return separator;
     }
 
-    public static InlineKeyboardButton createWebAppButton(Long chatId,  String url) {
+    public static InlineKeyboardButton createWebAppButton(Long chatId, String url) {
 
         String link = url + "?chatId=" + chatId;
 

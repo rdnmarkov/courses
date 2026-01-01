@@ -34,7 +34,7 @@ public class CourseServiceImpl implements CourseService {
         Page<Course> courses;
         if (categoryIds.isEmpty()) {
             courses = courseRepository.findAll(page);
-        }else {
+        } else {
             courses = courseRepository.findByCategory_IdInAndVisibilityTrue(categoryIds, page);
         }
 
@@ -58,7 +58,7 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.findById(id).get();
     }
 
-    public Page<Course> findByVisibilityTruePage(int offset) {
+    public Page<Course> findByVisibilityTruePage(int offset, Long categoryId) {
         final int PAGE_SIZE = 10;
         var page = PageRequest.of(offset, PAGE_SIZE);
         return courseRepository.findByVisibilityTrue(page);

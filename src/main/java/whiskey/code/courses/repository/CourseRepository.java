@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import whiskey.code.courses.entity.Course;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
@@ -18,15 +19,26 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Page<Course> findAll(Pageable pageable);
 
     @Query("""
-       SELECT DISTINCT c FROM Course c
-       LEFT JOIN c.lessons l
-       WHERE c.visibility = true
-         AND (
-             LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
-             OR LOWER(l.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
-         )
-       """)
+            SELECT DISTINCT c FROM Course c
+            LEFT JOIN c.lessons l
+            WHERE c.visibility = true
+              AND (
+                  LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                  OR LOWER(l.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+              )
+            """)
     Page<Course> searchByCourseOrLessonTitle(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("""
+            SELECT DISTINCT c FROM Course c
+            LEFT JOIN c.lessons l
+            WHERE c.visibility = true
+              AND (
+                  LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                  OR LOWER(l.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+              )
+            """)
+    List<Course> searchByCourseOrLessonTitle(@Param("keyword") String keyword);
 
     Page<Course> findByCategory_IdInAndVisibilityTrue(List<Long> categoryIds, Pageable pageable);
 

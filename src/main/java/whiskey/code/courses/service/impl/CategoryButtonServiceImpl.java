@@ -29,7 +29,7 @@ public class CategoryButtonServiceImpl implements ButtonService {
 
     private final CategoryService categoryService;
     private final BotProperties botProperties;
-    private final static String TEXT = "\uD83C\uDFF0 Выберите категорию:";
+    private final static String TEXT = "\uD83C\uDFEF Выберите категорию:";
 
 
     public SendMessage getButtons(Message message, CallbackQuery callbackQuery) {
@@ -67,7 +67,7 @@ public class CategoryButtonServiceImpl implements ButtonService {
         pageCategory.get().forEach(category -> {
                     InlineKeyboardButton button = new InlineKeyboardButton();
                     button.setText(category.getTitle());
-                    button.setCallbackData(PAGE_LESSON + category.getId()
+                    button.setCallbackData(PAGE_COURSE + category.getId()
                             + ZERO_PAGE + DELIMITER_PAGE + page);
                     rows.add(List.of(button));
                 }
@@ -75,15 +75,16 @@ public class CategoryButtonServiceImpl implements ButtonService {
 
         List<InlineKeyboardButton> navButtons = new ArrayList<>();
 
-        if (page > 0) navButtons.add(navButton(PREVIOUS, PAGE_COURSE + (page - 1)));
+        if (page > 0) navButtons.add(navButton(PREVIOUS, PAGE_CATEGORY + (page - 1)));
 
-        if (pageCategory.hasNext()) navButtons.add(navButton(NEXT, PAGE_COURSE + (page + 1)));
+        if (pageCategory.hasNext()) navButtons.add(navButton(NEXT, PAGE_CATEGORY + (page + 1)));
 
         if (!navButtons.isEmpty()) {
             rows.add(navButtons);
         }
 
-        rows.add(List.of(createWebAppButton(chatId, botProperties.getUrlWeb())));
+        rows.add(List.of(createWebAppButton(chatId, botProperties.getUrlWeb()),
+                navButton(SEARCH_COURSE, "SEARCH")));
 
         markup.setKeyboard(rows);
         return markup;
