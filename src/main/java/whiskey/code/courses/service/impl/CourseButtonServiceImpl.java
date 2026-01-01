@@ -115,24 +115,22 @@ public class CourseButtonServiceImpl implements ButtonService, ButtonSearchServi
 
         List<InlineKeyboardButton> navButtons = new ArrayList<>();
 
-
         if (pageCourse > 0) navButtons.add(navButton(PREVIOUS,
                 PAGE_COURSE + categoryId +
                         DELIMITER_PAGE + (pageCourse - 1) +
                         DELIMITER_PAGE + pageCategory));
+
+
+        navButtons.addAll(List.of(navButton(BACK_TO_CATEGORY, PAGE_CATEGORY + pageCategory),
+                createWebAppButton(chatId, botProperties.getUrlWeb()),
+                navButton(SEARCH_COURSE, PAGE_SEARCH)));
 
         if (pageCourses.hasNext()) navButtons.add(navButton(NEXT,
                 PAGE_COURSE + categoryId +
                         DELIMITER_PAGE + (pageCourse + 1) +
                         DELIMITER_PAGE + pageCategory));
 
-        if (!navButtons.isEmpty()) {
-            rows.add(navButtons);
-        }
-
-        rows.add(List.of(navButton(BACK_TO_CATEGORY, PAGE_CATEGORY + pageCategory)));
-        rows.add(List.of(createWebAppButton(chatId, botProperties.getUrlWeb())));
-        rows.add(List.of(navButton(SEARCH_COURSE, "SEARCH")));
+        rows.add(navButtons);
 
         markup.setKeyboard(rows);
         return markup;
@@ -156,31 +154,28 @@ public class CourseButtonServiceImpl implements ButtonService, ButtonSearchServi
                 }
         );
 
-        List<InlineKeyboardButton> navButtons = new ArrayList<>();
+        if (pageCourses.isEmpty()) {
+            rows.add(List.of(navButton("\uD83D\uDD0D Ничего не найдено, повторить?", PAGE_SEARCH)));
+        }
 
+        List<InlineKeyboardButton> navButtons = new ArrayList<>();
 
         if (pageCourse > 0) navButtons.add(navButton(PREVIOUS,
                 PAGE_COURSE_SEARCH + (pageCourse - 1) +
                         DELIMITER_PAGE + keyWord));
 
+        navButtons.addAll(List.of(createWebAppButton(chatId, botProperties.getUrlWeb()),
+                navButton(BACK_TO_CATEGORY, PAGE_CATEGORY + 0)));
+
+        if (!pageCourses.isEmpty()) {
+            navButtons.add(navButton(SEARCH_COURSE, PAGE_SEARCH));
+        }
+
         if (pageCourses.hasNext()) navButtons.add(navButton(NEXT,
                 PAGE_COURSE_SEARCH + (pageCourse - 1) +
                         DELIMITER_PAGE + keyWord));
 
-        if (!navButtons.isEmpty()) {
-            rows.add(navButtons);
-        }
-
-        if (pageCourses.isEmpty()) {
-            rows.add(List.of(navButton("\uD83D\uDD0D Ничего не найдено, повторить?", "SEARCH")));
-        }
-
-        rows.add(List.of(createWebAppButton(chatId, botProperties.getUrlWeb())));
-        rows.add(List.of(navButton(BACK_TO_CATEGORY, PAGE_CATEGORY + 0)));
-
-        if (!pageCourses.isEmpty()) {
-            rows.add(List.of(navButton(SEARCH_COURSE, "SEARCH")));
-        }
+        rows.add(navButtons);
 
         markup.setKeyboard(rows);
         return markup;

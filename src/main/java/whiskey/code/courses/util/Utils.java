@@ -80,7 +80,7 @@ public class Utils {
         String link = url + "?chatId=" + chatId;
 
         return InlineKeyboardButton.builder()
-                .text("🌐 Открыть Web")
+                .text(WEB_PAGE)
                 .url(link)
                 .build();
     }

@@ -49,7 +49,7 @@ public class CallbackQueryHandlerImpl implements UpdateHandler {
         if (!subscribeService.isMember(Utils.sendMemberReq(member, bot))) {
             Utils.sendMessage(subscribeService.sendSubscriptionRequestMes(message.getChatId()), bot);
         } else {
-            if (callbackData.startsWith("SEARCH")) {
+            if (callbackData.startsWith(PAGE_SEARCH)) {
                 SendMessage sm = new SendMessage();
                 sm.setChatId(message.getChatId());
                 sm.setText("🔎 Введите текст для поиска:");

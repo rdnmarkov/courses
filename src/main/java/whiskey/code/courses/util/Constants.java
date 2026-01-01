@@ -4,8 +4,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Constants {
-    public final static String PREVIOUS = "\uD83D\uDD19 Назад";
-    public final static String NEXT = "Далее ➡\uFE0F \uD83D\uDCA8";
+    public final static String PREVIOUS = "◀\uFE0F";
+    public final static String NEXT = "▶\uFE0F";
     public final static String PAGE_CATEGORY = "pg-category_";
     public final static String PAGE_COURSE = "pg-course_";
     public final static String PAGE_COURSE_SEARCH = "pg-course-search_";
@@ -13,14 +13,16 @@ public class Constants {
     public final static String PAGE_LESSON_SEARCH = "pg-lesson-search_";
     public final static String LESSON = "lesson_";
     public final static String LESSON_SEARCH = "lesson-search_";
+    public final static String PAGE_SEARCH = "pg-search_";
     public final static String ZERO_PAGE = "_0";
     public final static String DELIMITER_PAGE = "_";
     public final static int TOTAL_LENGTH = 20;
     public final static String FILLED_SYMBOL = "▓";
     public final static String EMPTY_SYMBOL = "▒";
     public final static String DELIMITER = " ";
-    public final static String BACK_TO_CATEGORY = "\uD83C\uDFEF Назад к категориям \uD83D\uDD19";
-    public final static String SEARCH_COURSE = "\uD83D\uDD0D Поиск курсов";
+    public final static String BACK_TO_CATEGORY = "\uD83C\uDFEF Категории";
+    public final static String SEARCH_COURSE = "\uD83D\uDD0D Поиск";
+    public final static String WEB_PAGE = "🌐 Web";
 
     // Course commands
     public static final String CREATE_COURSE = "/c_c ";

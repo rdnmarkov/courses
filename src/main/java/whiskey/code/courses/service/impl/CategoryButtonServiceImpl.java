@@ -77,14 +77,12 @@ public class CategoryButtonServiceImpl implements ButtonService {
 
         if (page > 0) navButtons.add(navButton(PREVIOUS, PAGE_CATEGORY + (page - 1)));
 
+        navButtons.addAll(List.of(createWebAppButton(chatId, botProperties.getUrlWeb()),
+                navButton(SEARCH_COURSE, PAGE_SEARCH)));
+
+        rows.add(navButtons);
+
         if (pageCategory.hasNext()) navButtons.add(navButton(NEXT, PAGE_CATEGORY + (page + 1)));
-
-        if (!navButtons.isEmpty()) {
-            rows.add(navButtons);
-        }
-
-        rows.add(List.of(createWebAppButton(chatId, botProperties.getUrlWeb()),
-                navButton(SEARCH_COURSE, "SEARCH")));
 
         markup.setKeyboard(rows);
         return markup;

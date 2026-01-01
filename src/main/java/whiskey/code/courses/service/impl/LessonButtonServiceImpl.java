@@ -29,8 +29,8 @@ public class LessonButtonServiceImpl implements ButtonService, ButtonSearchServi
 
     private final LessonService lessonService;
     private final static String TEXT = "\uD83C\uDF44 Выберите урок:";
-    private final static String BACK_TO_COURSE = "\uD83C\uDFF0 Назад к курсам \uD83D\uDD19";
-    private final static String BACK_TO_SEARCH_COURSE = "🔎 Назад к найденым курсам \uD83D\uDD19";
+    private final static String BACK_TO_COURSE = "\uD83C\uDFF0 Курсы";
+    private final static String BACK_TO_SEARCH_COURSE = "🔎 Курсы";
     private final BotProperties botProperties;
 
     @Override
@@ -135,6 +135,14 @@ public class LessonButtonServiceImpl implements ButtonService, ButtonSearchServi
                         DELIMITER_PAGE + categoryId
         ));
 
+        navButtons.addAll(List.of(navButton(BACK_TO_CATEGORY, PAGE_CATEGORY + pageCategory),
+                navButton(BACK_TO_COURSE, PAGE_COURSE + categoryId +
+                DELIMITER_PAGE + pageCourses +
+                DELIMITER_PAGE + pageCategory),
+                createWebAppButton(chatId, botProperties.getUrlWeb()),
+                navButton(SEARCH_COURSE, PAGE_SEARCH)
+                ));
+
         if (lessonPage.hasNext()) navButtons.add(navButton(NEXT,
                 PAGE_LESSON + courseId +
                         DELIMITER_PAGE + (pageLessons + 1) +
@@ -143,16 +151,7 @@ public class LessonButtonServiceImpl implements ButtonService, ButtonSearchServi
                         DELIMITER_PAGE + categoryId
         ));
 
-        if (!navButtons.isEmpty()) {
-            rows.add(navButtons);
-        }
-
-        rows.add(List.of(navButton(BACK_TO_COURSE, PAGE_COURSE + categoryId +
-                DELIMITER_PAGE + pageCourses +
-                DELIMITER_PAGE + pageCategory)));
-        rows.add(List.of(navButton(BACK_TO_CATEGORY, PAGE_CATEGORY + pageCategory)));
-        rows.add(List.of(createWebAppButton(chatId, botProperties.getUrlWeb())));
-        rows.add(List.of(navButton(SEARCH_COURSE, "SEARCH")));
+        rows.add(navButtons);
         markup.setKeyboard(rows);
         return markup;
     }
@@ -186,6 +185,12 @@ public class LessonButtonServiceImpl implements ButtonService, ButtonSearchServi
                         DELIMITER_PAGE + keyWord
         ));
 
+        navButtons.addAll(List.of(navButton(BACK_TO_CATEGORY, PAGE_CATEGORY + 0),
+                navButton(BACK_TO_SEARCH_COURSE, PAGE_COURSE_SEARCH + pageCourses +
+                DELIMITER_PAGE + keyWord),
+                createWebAppButton(chatId, botProperties.getUrlWeb()),
+                navButton(SEARCH_COURSE, PAGE_SEARCH)));
+
         if (lessonPage.hasNext()) navButtons.add(navButton(NEXT,
                 PAGE_LESSON_SEARCH + courseId +
                         DELIMITER_PAGE + (pageLessons + 1) +
@@ -193,15 +198,7 @@ public class LessonButtonServiceImpl implements ButtonService, ButtonSearchServi
                         DELIMITER_PAGE + keyWord
         ));
 
-        if (!navButtons.isEmpty()) {
-            rows.add(navButtons);
-        }
-
-        rows.add(List.of(navButton(BACK_TO_SEARCH_COURSE, PAGE_COURSE_SEARCH + pageCourses +
-                DELIMITER_PAGE + keyWord)));
-        rows.add(List.of(navButton(BACK_TO_CATEGORY, PAGE_CATEGORY + 0)));
-        rows.add(List.of(createWebAppButton(chatId, botProperties.getUrlWeb())));
-        rows.add(List.of(navButton(SEARCH_COURSE, "SEARCH")));
+        rows.add(navButtons);
         markup.setKeyboard(rows);
         return markup;
     }
