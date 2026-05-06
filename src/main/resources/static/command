@@ -1,11 +1,11 @@
 Команды для управления курсами
 1. Создать курс
-Формат: /c_c {title}|{visibility}
-Пример: /c_c Программирование на Java|true
+Формат: /c_c {title}|{visibility}|{description}|{category_id}
+Пример: /c_c Программирование на Java|true|Курс по программированию на java|0
 
 2. Полное обновление курса
-Формат: /u_c_f {id}|{title}|{visibility}
-Пример: /u_c_f 1|Программирование Java|true
+Формат: /u_c_f {id}|{title}|{visibility}|{description}|{category_id}
+Пример: /u_c_f 1|Программирование Java|true|Курс по программированию на java|0
 
 3. Обновить название курса
 Формат: /u_c_t {id}|{new_title}
@@ -47,4 +47,3 @@
 7. Удалить урок
 Формат: /d_l {id}
 Пример: /d_l 1
-

@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import whiskey.code.courses.entity.Course;
 import whiskey.code.courses.mapper.EntityDTOMapper;
+import whiskey.code.courses.repository.CategoryRepository;
 import whiskey.code.courses.repository.CourseRepository;
 import whiskey.code.courses.service.db.CourseService;
 
@@ -19,6 +20,7 @@ import java.util.Map;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
+    private final CategoryRepository categoryRepository;
     private final EntityDTOMapper dtoMapper;
     private static final int PAGE_SIZE = 20;
 
@@ -71,6 +73,8 @@ public class CourseServiceImpl implements CourseService {
         Course course = Course.builder()
                 .title(parts[0])
                 .visibility(parts.length > 1 && Boolean.parseBoolean(parts[1]))
+                .description(parts[2])
+                .category(categoryRepository.findById(Long.valueOf(parts[3])).get())
                 .build();
 
         return courseRepository.save(course);
@@ -83,7 +87,9 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new EntityNotFoundException("Course not found"));
 
         course.setTitle(parts.length > 1 ? parts[1] : "");
-        course.setVisibility(parts.length > 1 && Boolean.parseBoolean(parts[2]));
+        course.setVisibility(parts.length > 2 && Boolean.parseBoolean(parts[2]));
+        course.setDescription(parts.length > 3 ? parts[3] : "");
+        course.setCategory(parts.length > 4 ? categoryRepository.findById(Long.valueOf(parts[4])).get() : categoryRepository.findById(1L).get());
 
         return courseRepository.save(course);
     }
